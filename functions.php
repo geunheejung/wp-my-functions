@@ -9,6 +9,7 @@
   }
   add_action( 'wp_enqueue_scripts', 'theme_enqueue_styles' );
 
+<<<<<<< HEAD
   function theme_enqueue_scripts(){
       wp_enqueue_script( 'custom-script',get_stylesheet_directory_uri() . '/lib/custom-script.js',array(),'1.0',true);
   }
@@ -19,4 +20,17 @@
     add_shortcode('plus_selector', 'selectorTypeIsPlus');
     add_shortcode('auto_selector', 'selectorTypeIsAuto');
     // Price Selector ShortCode Filter
+=======
+	function theme_enqueue_scripts(){
+	    wp_enqueue_script( 'custom-script',get_stylesheet_directory_uri() . '/lib/custom-host-script.js',array(),'1.0',true);
+        wp_enqueue_script( 'custom-script',get_stylesheet_directory_uri() . '/lib/custom-pricing.js',array(),'1.0',true);
+	}
+	add_action( 'wp_enqueue_scripts', 'theme_enqueue_scripts' );
+	// AppDownload Shortcode
+	add_shortcode('app_download_btn', 'app_download');
+	// Price Selector ShortCode
+ 	add_shortcode('plus_selector', 'selectorTypeIsPlus');
+	add_shortcode('auto_selector', 'selectorTypeIsAuto');
+	// Price Selector ShortCode Filter
+>>>>>>> dev
 ?>

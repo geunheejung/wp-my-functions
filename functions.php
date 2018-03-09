@@ -23,7 +23,6 @@
 =======
 	function theme_enqueue_scripts(){
 	    wp_enqueue_script( 'custom-script',get_stylesheet_directory_uri() . '/lib/custom-host-script.js',array(),'1.0',true);
-        wp_enqueue_script( 'custom-script',get_stylesheet_directory_uri() . '/lib/custom-pricing.js',array(),'1.0',true);
 	}
 	add_action( 'wp_enqueue_scripts', 'theme_enqueue_scripts' );
 	// AppDownload Shortcode

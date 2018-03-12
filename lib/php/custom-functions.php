@@ -6,14 +6,15 @@ function getOptions( $type, $optionsArr, $params ) {
     $i = 0;
     $MAX = count($options);
     $resultOptions;
+    $elementId = $type . '_options';
 
     for ($i; $i < $MAX; $i++) {
 
         if ($i == $MAX - 1) {
-            $resultOptions.= "<option value='{$i}' id='{$type}_options'>$options[$i]$lastUnit</option>";
+            $resultOptions.= "<option value='{$i}' id='{$elementId}'>$options[$i]$lastUnit</option>";
             return $resultOptions;
         } else {
-            $resultOptions.= "<option value='{$i}' id='{$type}_options'>$options[$i]$unit</option>";
+            $resultOptions.= "<option value='{$i}' id='{$elementId}'>$options[$i]$unit</option>";
         }
 
     };
@@ -31,12 +32,10 @@ function getPriceSelectorScript() {
                                     
             fn.setTarget = function(target) {
                 this._target = document.querySelector(target);
-            };
-        
+            };        
             fn.setViewTarget = function(view) {
                 this._viewTarget = document.querySelector(view);
-            };
-            
+            };            
             fn.setPricings = function(pricings) {
                 if (!(Array.isArray(pricings))) return;
                 this._pricings = pricings;

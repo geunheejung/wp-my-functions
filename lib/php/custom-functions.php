@@ -22,69 +22,43 @@ function getOptions( $type, $optionsArr, $params ) {
 function getPriceSelectorScript() {
     echo "
         <script>                           
-            var pricing = (function () {                                                                                 
-                var targetSelector;
-                var changedView;
-                var plusPriceArr;
-                var autoPriceArr;
-                                            
-                function PriceText(pricng) {
-                    this.money = pricng;
-                    this.target = targetSelector;
-                    this.view = changedView;
-                }
-                                         
-                var bindChangePriceEvent = function(priceInfo) {
-                    if (!priceInfo instanceof PriceText) return Error('priceInfo not PriceText instacne');
-    
-                    var priceEventCb = function(current) {
-                        var resultPriceText = priceInfo.money[current.target.options[current.target.selectedIndex].value];
-                        
-                        priceInfo.view.innerHTML = \"<span class='before_' + type + '_money'>\" + resultPriceText + \"</span>\";
-                        priceInfo.view.innerHTML += \"<span class='after_' + type + '_unit'></span>\";
-                    };
-                    priceInfo.target.addEventListener('change', priceEventCb);
-                };
+        var Price = (function () {      
+            var Price = function() {
+                 this._target = null;
+                 this._viewTarget = null;
+                 this._pricings = [];
+            }, fn = Price.prototype;
+                                    
+            fn.setTarget = function(target) {
+                this._target = document.querySelector(target);
+            };
+        
+            fn.setViewTarget = function(view) {
+                this._viewTarget = document.querySelector(view);
+            };
+            
+            fn.setPricings = function(pricings) {
+                if (!(Array.isArray(pricings))) return;
+                this._pricings = pricings;
+            };
+        
+            fn.bindChangeEvent = function() {        
+                var self = this;
                 
-                var bindPricingEvent = function(type) {                    
-                    var PRICE_TYPE = ['plus', 'auto'];
-                    var isType = PRICE_TYPE.some(function(index) {                        
-                       return index === type; 
-                    });              
-                    console.log(isType);
-                    if (!isType) alert('Price Type is Not (plus, auto)');                                                                             
-                    var pricingInfo; 
+                this._target.addEventListener('change', function(current) {
+                    var option = current.target.option;                    
+                    var resultPriceText = self._pricings[current.target.options[current.target.selectedIndex].value];       
+                    self._viewTarget.innerHTML = \"<span>\" + resultPriceText + \"</span>\";                    
+                });
+            };                                                                                     
                     
-                    switch (type) {
-                        case PRICE_TYPE[0]:
-                            pricingInfo = new PriceText(plusPriceArr);                            
-                            break;
-                        case PRICE_TYPE[1]:
-                            pricingInfo = new PriceText(autoPriceArr);                            
-                            break;
-                        default:
-                            break;
-                    }
-                    
-                    bindChangePriceEvent(pricingInfo);
-                    
-                };
-                                                                                                                                                                                                        
-                return {
-                    setPlusPricings: function(priArr) {                        
-                        plusPriceArr = priArr;
-                    },
-                    setAutoPricings: function(priArr) {
-                        autoPriceArr = priArr;
-                    },
-                    setTarget: function(target, view) {
-                        targetSelector = document.getElementById(target);
-                        changedView = document.getElementById(view);
-                    },
-                    bindEvent: bindPricingEvent                   
-                }
+            return Price;                        
         })();
-</script>";
+        
+        var plus = new Price();
+        var auto = new Price();
+        </script>
+    ";
 }
 
 function getPricingOptions( $params ) {
@@ -136,7 +110,7 @@ function selectorTypeIsPlus( $atts, $content = null ) {
     ?>
     <script>
         var plusPricingMoneyArr = <?php echo json_encode($pricingPlusMoneyArr); ?>;
-        pricing.setPlusPricings(plusPricingMoneyArr);
+        plus.setPricings(plusPricingMoneyArr);
     </script>
     <?php
     return "<select class='plus_selector_box' id='plus_selector'>{$options}</select>";
@@ -159,7 +133,7 @@ function selectorTypeIsAuto( $atts, $content = null ) {
     ?>
     <script>
         var autoPricingMoneyArr = <?php echo json_encode($pricingAutoMoneyArr); ?>;
-        pricing.setAutoPricings(autoPricingMoneyArr);
+        auto.setPricings(autoPricingMoneyArr);
     </script>
     <?php
     return "<select class='auto_selector_box' id='auto_selector'>{$options}</select>";

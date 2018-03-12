@@ -5,9 +5,33 @@
  * Date: 2018. 3. 8.
  * Time: 오후 2:42
  */
+
 function getPriceSelectorScript() {
     echo "
-        <script>
+        <script>                                  
+        var Price = (function () {
+            var Price = function() {
+                this._target = null;
+                this._viewTarget = null;
+                this._pricings = [];
+                
+                var fn = Price.prototype;
+            
+                fn.setPricingArr = function(pricing) {
+                    if (!(Array.isArray(pricing))) return;
+                    this._pricings.push(pricing);
+                };
+                
+                fn.setTarget = function(target) {
+                    this._target = target;
+                }
+                                                                                           
+                return Price;
+            }                        
+        })();
+        
+        
+       
         var changePriceMoney = (function () {
         var plusSelectorTarget;
         var viewPlusText;
